@@ -1,59 +1,90 @@
+/* Reset & Body */
 body {
+  margin: 0;
   font-family: 'Arial', sans-serif;
-  background: #f5f7fa;
+  background-color: #f4f4f9;
   color: #333;
+}
+
+/* Header / Hero */
+header {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+header h1 {
+  font-size: 3em;
+  margin: 0 0 20px;
+}
+
+header p {
+  font-size: 1.2em;
+  margin: 0 0 40px;
+}
+
+/* Email Form */
+.email-capture {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
+  padding: 50px 20px;
+  background-color: #fff;
 }
 
-.container {
-  text-align: center;
-  background: white;
-  padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+.email-capture form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   max-width: 400px;
 }
 
-h1 {
-  font-size: 2.2rem;
-  margin-bottom: 15px;
-  color: #1a1a1a;
-}
-
-p {
-  font-size: 1rem;
-  margin-bottom: 20px;
-  line-height: 1.4;
-}
-
-input[type="email"] {
-  padding: 10px;
-  width: 70%;
-  border-radius: 5px;
+.email-capture input[type="email"] {
+  padding: 15px;
+  font-size: 1em;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  transition: border-color 0.3s;
 }
 
-button {
-  padding: 10px 20px;
-  border-radius: 5px;
+.email-capture input[type="email"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+.email-capture button {
+  padding: 15px;
+  font-size: 1em;
   border: none;
-  background-color: #4a90e2;
+  border-radius: 8px;
+  background-color: #4CAF50;
   color: white;
   cursor: pointer;
-  font-weight: bold;
+  transition: background 0.3s;
 }
 
-button:hover {
-  background-color: #357ab8;
+.email-capture button:hover {
+  background-color: #45A049;
 }
 
-.disclaimer {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 15px;
+/* Footer */
+footer {
+  text-align: center;
+  padding: 30px 20px;
+  font-size: 0.9em;
+  color: #777;
+  background-color: #f4f4f9;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 2em;
+  }
+
+  .email-capture {
+    padding: 30px 10px;
+  }
 }
