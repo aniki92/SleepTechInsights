@@ -3,10 +3,20 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.sleeptechinsights.com" }],
-      "destination": "https://sleeptechinsights.com/:path*",
+      "has": [{ "type": "host", "value": "sleeptechinsights.com" }],
+      "destination": "https://www.sleeptechinsights.com/:path*",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    { "source": "/blog",        "destination": "/#blog" },
+    { "source": "/blog/",       "destination": "/#blog" },
+    { "source": "/reviews",     "destination": "/#reviews" },
+    { "source": "/reviews/",    "destination": "/#reviews" },
+    { "source": "/guides",      "destination": "/#guides" },
+    { "source": "/guides/",     "destination": "/#guides" },
+    { "source": "/newsletter",  "destination": "/#newsletter" },
+    { "source": "/newsletter/", "destination": "/#newsletter" }
   ],
   "headers": [
     {
