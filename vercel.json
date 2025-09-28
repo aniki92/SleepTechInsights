@@ -9,6 +9,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/posts/:slug/", "destination": "/post.html?slug=:slug" },
     { "source": "/blog",        "destination": "/#blog" },
     { "source": "/blog/",       "destination": "/#blog" },
     { "source": "/reviews",     "destination": "/#reviews" },
@@ -21,27 +22,19 @@
   "headers": [
     {
       "source": "/style.css",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
       "source": "/posts/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=60" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=60" }]
     },
     {
       "source": "/",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=300" }]
     },
     {
       "source": "/:path*/",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=300" }]
     }
   ]
 }

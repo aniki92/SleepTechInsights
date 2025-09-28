@@ -1,0 +1,11 @@
+{
+  "name": "sleeptechinsights-static",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "images:build": "node scripts/convert-images.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.33.2"
+  }
+}

@@ -1,0 +1,29 @@
+name: Generate AVIF/WebP
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'images/posts/**'
+      - 'scripts/convert-images.mjs'
+      - 'package.json'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || npm i
+      - run: npm run images:build
+      - name: Commit generated images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/posts/*.webp images/posts/*.avif || true
+          git commit -m "chore(images): add generated AVIF/WebP" || echo "No changes"
+          git push
