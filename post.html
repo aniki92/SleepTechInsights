@@ -1,3 +1,4 @@
+@'
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,11 +17,7 @@
 
 <!-- GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XDNXB6YJKD"></script>
-<script>
-  window.dataLayer=window.dataLayer||[];
-  function gtag(){dataLayer.push(arguments)}
-  gtag('js', new Date()); gtag('config','G-XDNXB6YJKD',{send_page_view:true});
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-XDNXB6YJKD",{send_page_view:true});</script>
 
 <style>
   .post-wrap{max-width:860px;margin:0 auto;padding:40px 20px}
@@ -57,7 +54,6 @@
       <div id="post-content" class="post">Loading content…</div>
     </article>
 
-    <!-- Inline newsletter CTA -->
     <section class="newsletter" style="margin-top:22px">
       <div class="container" style="max-width:860px;padding:0">
         <h2>Get Weekly Sleep Tech Tips</h2>
@@ -76,10 +72,10 @@
   </footer>
 
 <script>
-  // Footer year
+  // Year
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // --- Tiny Markdown -> HTML (subset)
+  // --- Tiny Markdown -> HTML
   function mdToHtml(md){
     md = md.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]));
     md = md.replace(/```([\s\S]*?)```/g, (_,c)=>'<pre><code>'+c.replace(/</g,'&lt;')+'</code></pre>');
@@ -90,13 +86,13 @@
            .replace(/\*(.*?)\*/g,'<em>$1</em>');
     md = md.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img alt="$1" src="$2">');
     md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
-    md = md.replace(/(?:^|\n)[*-] (.*)(?=\n|$)/g, (m, item)=>`\n<li>${item}</li>`);
-    md = md.replace(/(?:<li>[\s\S]*<\/li>)/g, s=>'<ul>'+s+'</ul>');
+    md = md.replace(/(?:^|\n)[*-] (.*)(?=\n|$)/g,(m,item)=>`\n<li>${item}</li>`);
+    md = md.replace(/(?:<li>[\s\S]*<\/li>)/g,s=>'<ul>'+s+'</ul>');
     md = md.replace(/^(?!<h\d|<ul|<li|<pre|<img|<p|<\/)(.+)$/gm,'<p>$1</p>');
     return md;
   }
 
-  // Extract slug from ?slug= or /posts/{slug}/
+  // Get slug
   function getSlug(){
     const u=new URL(location.href);
     if (u.searchParams.get('slug')) return u.searchParams.get('slug');
@@ -104,22 +100,24 @@
     return m ? m[1] : null;
   }
 
-  // Wrap local post images into <picture> with AVIF/WebP
-  function upgradeImagesToPicture() {
-    const root = document.getElementById('post-content');
-    root.querySelectorAll('img').forEach(img => {
-      const src = img.getAttribute('src'); if (!src) return;
-      if (!/^\/images\/posts\//.test(src)) return;
-      const avif = src.replace(/\.(jpg|jpeg|png)$/i, '.avif');
-      const webp = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-      const pic = document.createElement('picture');
-      const s1 = document.createElement('source'); s1.type = 'image/avif'; s1.srcset = avif;
-      const s2 = document.createElement('source'); s2.type = 'image/webp'; s2.srcset = webp;
-      img.replaceWith(pic); pic.appendChild(s1); pic.appendChild(s2); pic.appendChild(img);
+  // --- Cloudflare CDN rewrite (responsive)
+  const IMG_CDN = "https://img.sleeptechinsights.com";
+  function rewriteImagesToCdn() {
+    const root = document.getElementById("post-content");
+    root.querySelectorAll("img").forEach(img => {
+      const src = img.getAttribute("src");
+      if (!src || !src.startsWith("/images/posts/")) return;
+
+      const widths = [480, 768, 1200, 1600];
+      img.srcset = widths
+        .map(w => `${IMG_CDN}/cdn-cgi/image/format=auto,quality=85,width=${w}${src} ${w}w`)
+        .join(", ");
+      img.sizes = "(max-width: 768px) 92vw, 860px";
+      img.src   = `${IMG_CDN}/cdn-cgi/image/format=auto,quality=85,width=1200${src}`;
     });
   }
 
-  // Convert aff:slug links using /affiliates.json
+  // Affiliate mapper
   async function resolveAffiliateLinks() {
     const root = document.getElementById('post-content');
     const anchors = [...root.querySelectorAll('a[href^="aff:"]')];
@@ -140,14 +138,12 @@
     });
   }
 
-  // GA newsletter submit on this page
+  // GA events
   document.addEventListener('submit',e=>{
     if(e.target.matches('form.js-newsletter')){
       window.gtag && gtag('event','newsletter_submit',{location:'post-inline'});
     }
   });
-
-  // GA affiliate click tracking
   document.addEventListener('click',e=>{
     const a=e.target.closest('a'); if(!a) return;
     if((a.rel||'').includes('sponsored')){
@@ -159,13 +155,11 @@
     const slug = getSlug();
     if(!slug){ document.getElementById('post-content').textContent='Missing slug.'; return; }
 
-    // Load metadata
     const metaRes = await fetch('/posts/index.json',{cache:'no-store'});
     const posts = metaRes.ok ? await metaRes.json() : [];
     const post = posts.find(p=>p.slug===slug);
     if(!post){ document.getElementById('post-content').textContent='Post not found.'; return; }
 
-    // Head/meta (canonical to www)
     const canon = `https://www.sleeptechinsights.com/posts/${slug}/`;
     document.title = `${post.title} | SleepTechInsights`;
     const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr,val); }
@@ -176,22 +170,21 @@
     set('meta[property="og:url"]','content',canon);
     set('meta[property="og:image"]','content',post.ogImage||'');
 
-    // Visible header
     document.getElementById('post-title').textContent = post.title;
-    document.getElementById('post-meta').textContent = `${post.category || 'Article'} • ${post.date || ''}`;
+    document.getElementById('post-meta').textContent =
+      `${post.category || 'Article'} • ${post.date || ''}`;
 
-    // Load and render Markdown
     const mdRes = await fetch(`/posts/content/${slug}.md`,{cache:'no-store'});
     const md = mdRes.ok ? await mdRes.text() : 'Content missing.';
     document.getElementById('post-content').innerHTML = mdToHtml(md);
 
-    // Enhance content
-    upgradeImagesToPicture();
+    // New: CDN rewrite + affiliate resolve
+    rewriteImagesToCdn();
     await resolveAffiliateLinks();
 
-    // Track view
     window.gtag && gtag('event','post_view',{slug, category:post.category||'Unknown'});
   })();
 </script>
 </body>
 </html>
+'@ | Set-Content -Encoding utf8 post.html
