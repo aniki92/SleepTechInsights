@@ -3,7 +3,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "images:build": "node scripts/convert-images.mjs"
+    "images:build": "node scripts/convert-images.mjs",
+    "vercel-build": "npm ci && npm run images:build"
   },
   "dependencies": {
     "sharp": "^0.33.2"
