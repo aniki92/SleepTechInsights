@@ -6,12 +6,40 @@ body {
   color: #333;
 }
 
-/* Header / Hero */
+/* Header / Hero with Background Illustration */
 header {
   background: linear-gradient(135deg, #4CAF50, #2E7D32);
   color: white;
   text-align: center;
   padding: 80px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle abstract illustration (SVG circles) */
+header::after {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  top: -100px;
+  right: -100px;
+  z-index: 0;
+  animation: float 15s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(20px) rotate(45deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Ensure text is above illustration */
+header h1, header p {
+  position: relative;
+  z-index: 1;
 }
 
 header h1 {
@@ -31,6 +59,9 @@ header p {
   align-items: center;
   padding: 50px 20px;
   background-color: #fff;
+  position: relative;
+  z-index: 1;
+  animation: float-form 6s ease-in-out infinite;
 }
 
 .email-capture form {
@@ -46,11 +77,12 @@ header p {
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-bottom: 15px;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .email-capture input[type="email"]:focus {
   border-color: #4CAF50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
   outline: none;
 }
 
@@ -62,11 +94,46 @@ header p {
   background-color: #4CAF50;
   color: white;
   cursor: pointer;
-  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
 }
 
 .email-capture button:hover {
   background-color: #45A049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Sparkle effect */
+.email-capture button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.5) rotate(0deg);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.email-capture button:hover::after {
+  animation: sparkle 0.8s forwards;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+  100% { opacity: 0; transform: scale(1.5) rotate(90deg); }
+}
+
+/* Floating animation for the form */
+@keyframes float-form {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* Footer */
