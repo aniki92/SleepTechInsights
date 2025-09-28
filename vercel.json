@@ -1,9 +1,31 @@
 {
+  "trailingSlash": true,
   "redirects": [
     {
-      "source": "/(.*[^/])",
-      "destination": "/$1/",
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.sleeptechinsights.com" }],
+      "destination": "https://sleeptechinsights.com/:path*",
       "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/styles.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/posts/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=60" }
+      ]
+    },
+    {
+      "source": "/(.*).html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300" }
+      ]
     }
   ]
 }
